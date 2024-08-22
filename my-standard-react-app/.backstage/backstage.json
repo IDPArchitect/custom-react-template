@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "projectType": "react-typescript",
+  "buildTool": "vite"
+}
