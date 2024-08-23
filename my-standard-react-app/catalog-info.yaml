@@ -16,5 +16,5 @@ metadata:
 spec:
   type: website
   lifecycle: experimental
-  owner: infrastructure
+  owner: team-a
 
