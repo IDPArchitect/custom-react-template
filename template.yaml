@@ -4,6 +4,9 @@ metadata:
   name: custom-react-template
   title: Custom React Template
   description: A custom React template with TypeScript, ESLint, Prettier, and Husky
+  tags:
+    - react
+    - typescript
 spec:
   owner: default/engineering
   type: website
@@ -18,7 +21,7 @@ spec:
           title: Name
           type: string
           description: Unique name of the component
-          pattern: '^[a-zA-Z0-9-_]{1,63}$'  # Add validation to enforce a valid name format
+          pattern: '^[a-zA-Z0-9-_]{1,63}$'
         description:
           title: Description
           type: string
@@ -68,5 +71,6 @@ spec:
       - title: Open in catalog
         icon: catalog
         entityRef: ${{ steps['register'].output.entityRef }}
+
 
 
