@@ -12,6 +12,7 @@ spec:
       required:
         - component_id
         - owner
+        - repoUrl
       properties:
         component_id:
           title: Name
@@ -25,12 +26,16 @@ spec:
           title: Owner
           type: string
           description: Owner of the component
+        repoUrl:
+          title: Repository URL
+          type: string
+          description: The GitHub repository URL where this project will be hosted.
   steps:
     - id: fetch-base
       name: Fetch Base
       action: fetch:template
       input:
-        url: ./my-standard-react-app
+        url: https://github.com/IDPArchitect/custom-react-template
         values:
           component_id: ${{ parameters.component_id }}
           description: ${{ parameters.description }}
@@ -41,7 +46,7 @@ spec:
       input:
         allowedHosts: ['github.com']
         description: This is ${{ parameters.component_id }}
-        repoUrl: ?${{ parameters.repoUrl }}
+        repoUrl: ${{ parameters.repoUrl }}
     - id: register
       name: Register
       action: catalog:register
@@ -55,3 +60,4 @@ spec:
       - title: Open in catalog
         icon: catalog
         entityRef: ${{ steps['register'].output.entityRef }}
+
