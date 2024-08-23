@@ -3442,11 +3442,13 @@ var require_react_dom_development = __commonJS({
               warnedProperties$1[name] = true;
               return false;
             }
+            {% raw %}
             if ((value === "false" || value === "true") && propertyInfo !== null && propertyInfo.type === BOOLEAN) {
               error("Received the string `%s` for the boolean attribute `%s`. %s Did you mean %s={%s}?", value, name, value === "false" ? "The browser will interpret it as a truthy value." : 'Although this works, it will not work as expected if you pass the string "false".', name, value);
               warnedProperties$1[name] = true;
               return true;
             }
+            {% endraw %}
             return true;
           };
         }
