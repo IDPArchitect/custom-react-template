@@ -1,11 +1,18 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: my-custom-react-template 
+  name: my-custom-react-template
   description: ${{values.description | dump}}
   annotations:
     github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
     backstage.io/techdocs-ref: dir:.
+  links:
+    - url: https://github.com/${{values.owner}}/${{values.component_id}}
+      title: GitHub Repository
+      icon: github
+    - url: http://localhost:3000
+      title: Local Backstage Dashboard
+      icon: dashboard
 spec:
   type: website
   lifecycle: experimental
