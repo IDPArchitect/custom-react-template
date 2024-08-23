@@ -1,8 +1,8 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: my-custom-react-template-${{values.component_id | lower}}
-  description: Custom React Template - ${{values.description | dump}}
+  name: my-custom-react-template 
+  description: ${{values.description | dump}}
   annotations:
     github.com/project-slug: ${{values.destination.owner + "/" + values.destination.repo}}
     backstage.io/techdocs-ref: dir:.

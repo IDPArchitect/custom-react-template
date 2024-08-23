@@ -18,6 +18,7 @@ spec:
           title: Name
           type: string
           description: Unique name of the component
+          pattern: '^[a-zA-Z0-9-_]{1,63}$'  # Add validation to enforce a valid name format
         description:
           title: Description
           type: string
@@ -40,6 +41,13 @@ spec:
           component_id: ${{ parameters.component_id }}
           description: ${{ parameters.description }}
           owner: ${{ parameters.owner }}
+    - id: set-name
+      name: Set Component Name
+      action: transform:rename
+      input:
+        files:
+          - from: my-custom-react-template
+            to: ${{ parameters.component_id | lower }}
     - id: publish
       name: Publish
       action: publish:github
@@ -60,4 +68,5 @@ spec:
       - title: Open in catalog
         icon: catalog
         entityRef: ${{ steps['register'].output.entityRef }}
+
 
