@@ -15,13 +15,13 @@ spec:
       required:
         - component_id
         - owner
-        - repoUrl
       properties:
         component_id:
           title: Name
           type: string
           description: Unique name of the component
           pattern: '^[a-zA-Z0-9-_]{1,63}$'
+          ui:field: EntityNamePicker
         description:
           title: Description
           type: string
@@ -30,27 +30,34 @@ spec:
           title: Owner
           type: string
           description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+    - title: Choose a location
+      required:
+        - repoUrl
+      properties:
         repoUrl:
-          title: Repository URL
+          title: Repository Location
           type: string
-          description: The GitHub repository URL where this project will be hosted.
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
   steps:
-    - id: fetch-base
-      name: Fetch Base
+    - id: template
+      name: Fetch Skeleton + Template
       action: fetch:template
       input:
         url: https://github.com/IDPArchitect/custom-react-template
+        copyWithoutRender:
+          - .github/workflows/*
         values:
           component_id: ${{ parameters.component_id }}
           description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
           owner: ${{ parameters.owner }}
-    - id: set-name
-      name: Set Component Name
-      action: fs:rename
-      input:
-        files:
-          - from: custom-react-template
-            to: ${{ parameters.component_id | lower }}
     - id: publish
       name: Publish
       action: publish:github
@@ -62,15 +69,14 @@ spec:
       name: Register
       action: catalog:register
       input:
-        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
-        catalogInfoPath: '/catalog-info.yaml'
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: "/catalog-info.yaml"
   output:
     links:
       - title: Repository
-        url: ${{ steps['publish'].output.remoteUrl }}
+        url: ${{ steps.publish.output.remoteUrl }}
       - title: Open in catalog
         icon: catalog
-        entityRef: ${{ steps['register'].output.entityRef }}
-
+        entityRef: ${{ steps.register.output.entityRef }}
 
 
