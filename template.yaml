@@ -46,7 +46,7 @@ spec:
           owner: ${{ parameters.owner }}
     - id: set-name
       name: Set Component Name
-      action: transform:rename
+      action: fs:rename
       input:
         files:
           - from: my-custom-react-template
