@@ -49,7 +49,7 @@ spec:
       action: fs:rename
       input:
         files:
-          - from: my-custom-react-template
+          - from: custom-react-template
             to: ${{ parameters.component_id | lower }}
     - id: publish
       name: Publish
