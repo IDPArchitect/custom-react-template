@@ -8,7 +8,7 @@ metadata:
     - react
     - app
 spec:
-  owner: anon@anon.com
+  owner: team-a
   type: website
   parameters:
     - title: Provide some simple information
