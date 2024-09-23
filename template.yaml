@@ -50,7 +50,7 @@ spec:
       action: fetch:template
       input:
         url: "https://github.com/IDPArchitect/custom-react-template"
-        copyWithoutRender:
+        copyWithoutTemplating:
           - .github/workflows/*
         values:
           component_id: ${{ parameters.component_id }}
