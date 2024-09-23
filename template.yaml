@@ -8,7 +8,7 @@ metadata:
     - react
     - typescript
 spec:
-  owner: default/engineering
+  owner: default/infrastructure
   type: website
   parameters:
     - title: Provide some simple information
