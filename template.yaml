@@ -1,14 +1,14 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: custom-react-template
-  title: Custom React Template
-  description: A custom React template with TypeScript, ESLint, Prettier, and Husky
+  name: create-react-app-template
+  title: Create React App Template
+  description: Create a new React website project
   tags:
     - react
-    - typescript
+    - app
 spec:
-  owner: default/infrastructure
+  owner: anon@anon.com
   type: website
   parameters:
     - title: Provide some simple information
@@ -20,7 +20,6 @@ spec:
           title: Name
           type: string
           description: Unique name of the component
-          pattern: '^[a-zA-Z0-9-_]{1,63}$'
           ui:field: EntityNamePicker
         description:
           title: Description
@@ -45,56 +44,42 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
-steps:
-  - id: debug
-    name: Debug Values
-    action: debug:log
-    input:
-      message: |
-        Raw repoUrl: ${{ parameters.repoUrl }}
-        Parsed repoUrl: ${{ parameters.repoUrl | parseRepoUrl | dump }}
-        Component ID: ${{ parameters.component_id }}
-        Owner: ${{ parameters.owner }}
+  steps:
+    - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutRender:
+          - .github/workflows/*
+        values:
+          component_id: ${{ parameters.component_id }}
+          description: ${{ parameters.description }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          owner: ${{ parameters.owner }}
 
-  - id: template
-    name: Fetch Skeleton + Template
-    action: fetch:template
-    input:
-      url: https://github.com/IDPArchitect/custom-react-template
-      targetPath: ./
-      copyWithoutRender:
-        - .github/workflows/*
-      values:
-        component_id: ${{ parameters.component_id }}
-        description: ${{ parameters.description }}
-        destination: ${{ parameters.repoUrl | parseRepoUrl }}
-        owner: ${{ parameters.owner }}
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts:
+          - github.com
+        description: This is ${{ parameters.component_id }}
+        repoUrl: ${{ parameters.repoUrl }}
 
-  - id: publish
-    name: Publish
-    action: publish:github
-    input:
-      allowedHosts: ['github.com']
-      description: This is ${{ parameters.component_id }}
-      repoUrl: ${{ parameters.repoUrl }}
-      token: ${GITHUB_TOKEN}
-    if:
-      not:
-        ${{ parameters.dryRun }}
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: "/catalog-info.yaml"
 
-  - id: register
-    name: Register
-    action: catalog:register
-    input:
-      repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-      catalogInfoPath: "/catalog-info.yaml"
-
-output:
-  links:
-    - title: Repository
-      url: ${{ steps.publish.output.remoteUrl }}
-    - title: Open in catalog
-      icon: catalog
-      entityRef: ${{ steps.register.output.entityRef }}
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
 
 
